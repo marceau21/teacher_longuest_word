@@ -9,11 +9,19 @@ class PartiesController < ApplicationController
   def create
     @party = Party.new(party_params)
     @party.game = current_game
-    # binding.pry
+    if CheckWord.new(@party.word, @party.ten_letters_list).is_valid?
+      @party.save
+      redirect_to party_path(@party)
+    else
+      render :new
+    end
 
   end
 
   def show
+    @game = current_game
+    @party = Party.find(params[:id])
+    @solutions = Solution.where(party_id = @party)
 
   end
 
