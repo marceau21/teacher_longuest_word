@@ -9,8 +9,13 @@ class PartiesController < ApplicationController
   def create
     @party = Party.new(party_params)
     @party.game = current_game
-    if CheckWord.new(@party.word, @party.ten_letters_list).is_valid?
+    check = CheckWord.new(@party.word, @party.ten_letters_list)
+    if check.is_valid? && check.exists?
+      @party.available = true
+      # TODO: implement score method
+      @party.score = @party.word.length
       @party.save
+      check.ten_best_answers(@party.ten_letters_list).each {|answer| Solution.create(word: answer, party_id: @party.id)}
       redirect_to party_path(@party)
     else
       render :new
@@ -21,7 +26,8 @@ class PartiesController < ApplicationController
   def show
     @game = current_game
     @party = Party.find(params[:id])
-    @solutions = Solution.where(party_id = @party)
+    # binding.pry
+    @solutions = Solution.where(party_id: @party.id)
 
   end
 
@@ -42,8 +48,5 @@ class PartiesController < ApplicationController
   def current_game
     current_user.games.last
   end
-
-
 end
-
 

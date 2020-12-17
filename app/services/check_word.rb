@@ -11,13 +11,27 @@ class CheckWord
   end
 
   def is_valid?
-    # binding.pry
-    @word.chars.each { |letter| @ten_letters_list.include?(letter) ? letter : false }
+    return true if (@word.chars - @ten_letters_list.chars).size < 10
+  end
+
+  def exists?
     dictionnary.include?(@word.upcase)
   end
-  # private
 
-   def dictionnary
+  def ten_best_answers(ten_letters_list)
+    results = []
+    dictionnary.each do |word|
+      ten_letters = ten_letters_list.upcase.chars
+      word.chars.each { |letter| ten_letters.include?(letter) ? ten_letters.delete_at(ten_letters.index(letter)) : false }
+      results << word if word.length == (ten_letters_list.length - ten_letters.length)
+    end
+    return results.sort{|x, y| x.length <=> y.length}.last(10)
+  end
+
+  private
+
+  # TODO: create a model dictionnary
+  def dictionnary
     path = File.join(Rails.root, 'db', 'liste_francais.txt')
     dictionnary = []
     File.open(path, 'rb', encoding: "ISO8859-1:utf-8").each do |line|
