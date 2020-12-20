@@ -8,7 +8,7 @@ class Party < ApplicationRecord
       consonants = letters - vowells
 
       #TODO: put uncomment first line before prod launch
-      sample = vowells.sample(5) + consonants.to_a.sample(5)
+      sample = (vowells.sample(5) + consonants.to_a.sample(5)).shuffle
       # sample = ['a', 'b', 'a', 'n', 'd', 'o', 'n','e']
   end
 end

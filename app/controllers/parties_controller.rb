@@ -18,7 +18,7 @@ class PartiesController < ApplicationController
       check.ten_best_answers(@party.ten_letters_list).each {|answer| Solution.create(word: answer, party_id: @party.id)}
       redirect_to party_path(@party)
     else
-      render :new
+      redirect_to new_party_path, notice: "hum... ce mot n'est pas terrible"
     end
 
   end
@@ -26,6 +26,7 @@ class PartiesController < ApplicationController
   def show
     @game = current_game
     @party = Party.find(params[:id])
+    @score = @party.score
     # binding.pry
     @solutions = Solution.where(party_id: @party.id)
 
