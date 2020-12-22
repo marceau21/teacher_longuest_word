@@ -1,6 +1,7 @@
 class Party < ApplicationRecord
   belongs_to :game
   has_many :solutions
+  validates :word, presence: true
 
   def self.sampled_letters
     vowells = ['a', 'e', 'i','o','u']

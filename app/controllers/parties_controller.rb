@@ -12,10 +12,9 @@ class PartiesController < ApplicationController
     check = CheckWord.new(@party.word, @party.ten_letters_list)
     if check.is_valid? && check.exists?
       @party.available = true
-      # TODO: implement score method
       @party.score = @party.word.length
       @party.save
-      check.ten_best_answers(@party.ten_letters_list).each {|answer| Solution.create(word: answer, party_id: @party.id)}
+      check.ten_best_answers.each {|answer| Solution.create(word: answer, party_id: @party.id)}
       redirect_to party_path(@party)
     else
       redirect_to new_party_path, notice: "hum... ce mot n'est pas terrible"

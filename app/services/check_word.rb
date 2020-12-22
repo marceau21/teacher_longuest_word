@@ -18,12 +18,12 @@ class CheckWord
     dictionnary.include?(@word.upcase)
   end
 
-  def ten_best_answers(ten_letters_list)
+  def ten_best_answers
     results = []
     dictionnary.each do |word|
-      ten_letters = ten_letters_list.upcase.chars
+      ten_letters = @ten_letters_list.upcase.chars
       word.chars.each { |letter| ten_letters.include?(letter) ? ten_letters.delete_at(ten_letters.index(letter)) : false }
-      results << word if word.length == (ten_letters_list.length - ten_letters.length)
+      results << word if word.length == (@ten_letters_list.length - ten_letters.length)
     end
     return results.sort{|x, y| x.length <=> y.length}.last(10)
   end
